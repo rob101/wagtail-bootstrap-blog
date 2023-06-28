@@ -2,7 +2,7 @@ import markdown
 
 
 def render_markdown(value):
-    html = markdown.markdown(
+    return markdown.markdown(
         value,
         extensions=[
             'extra',
@@ -14,6 +14,5 @@ def render_markdown(value):
                 ('guess_lang', False),
             ]
         },
-        output_format='html5'
+        output_format='html5',
     )
-    return html
