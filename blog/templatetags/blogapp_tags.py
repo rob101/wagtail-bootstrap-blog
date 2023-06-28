@@ -68,7 +68,7 @@ def url_replace(request, **kwargs):
 @register.simple_tag()
 def post_page_date_slug_url(post_page, blog_page):
     post_date = post_page.post_date
-    url = blog_page.full_url + blog_page.reverse_subpage(
+    return blog_page.full_url + blog_page.reverse_subpage(
         "post_by_date_slug",
         args=(
             post_date.year,
@@ -77,7 +77,6 @@ def post_page_date_slug_url(post_page, blog_page):
             post_page.slug,
         ),
     )
-    return url
 
 
 @register.filter(name='markdown')

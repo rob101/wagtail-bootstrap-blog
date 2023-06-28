@@ -55,11 +55,11 @@ class BlogPage(RoutablePageMixin, Page):
 
     @route(r"^(\d{4})/(\d{2})/(\d{2})/(.+)/$")
     def post_by_date_slug(self, request, year, month, day, slug, *args, **kwargs):
-        post_page = self.get_posts().filter(slug=slug).first()
-        if not post_page:
+        if post_page := self.get_posts().filter(slug=slug).first():
+            # here we render another page, so we call the serve method of the page instance
+            return post_page.serve(request)
+        else:
             raise Http404
-        # here we render another page, so we call the serve method of the page instance
-        return post_page.serve(request)
 
     @route(r"^(\d{4})/$")
     @route(r"^(\d{4})/(\d{2})/$")
@@ -163,9 +163,7 @@ class PostPage(MetadataPageMixin, Page):
     ]
 
     def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        # context['blog_page'] = self.blog_page
-        return context
+        return super().get_context(request, *args, **kwargs)
 
     @cached_property
     def blog_page(self):
@@ -212,9 +210,7 @@ class FormPage(WagtailCaptchaEmailForm):
         return self.get_parent().specific
 
     def get_context(self, request, *args, **kwargs):
-        context = super(FormPage, self).get_context(request, *args, **kwargs)
-        # context["blog_page"] = self.blog_page
-        return context
+        return super(FormPage, self).get_context(request, *args, **kwargs)
 
 
 class PostPageBlogCategory(models.Model):
